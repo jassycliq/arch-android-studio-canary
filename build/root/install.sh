@@ -16,7 +16,6 @@ tar xvf /tmp/android-studio.tar.gz -C /opt/
 
 # move shell scripts to /root
 mv /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
-mv /tmp/android-studio /opt/android-studio
 
 # pacman packages
 ####

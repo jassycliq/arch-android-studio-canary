@@ -8,12 +8,15 @@ set -e
 
 # download build scripts from github
 curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o /tmp/scripts-master.zip -L https://github.com/binhex/scripts/archive/master.zip
+curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o /tmp/android-studio.tar.gz -L https://dl.google.com/dl/android/studio/ide-zips/4.0.0.9/android-studio-ide-193.6137316-linux.tar.gz
 
 # unzip build scripts
 unzip /tmp/scripts-master.zip -d /tmp
+tar xvf /tmp/android-studio.tar.gz -C /opt/
 
 # move shell scripts to /root
 mv /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
+mv /tmp/android-studio /opt/android-studio
 
 # pacman packages
 ####
@@ -30,7 +33,7 @@ fi
 ####
 
 # define aur packages
-aur_packages="websockify intellij-idea-ce"
+aur_packages="websockify"
 
 # call aur install script (arch user repo)
 source aur.sh
@@ -41,27 +44,27 @@ source aur.sh
 # set intellij path selector, this changes the path used by intellij to check for a custom idea.properties file
 # the path is constructed from /home/nobody/.<idea.paths.selector value>/config/ so the idea.properties file then needs
 # to be located in /home/nobody/.config/intellij/idea.properties, note double backslash to escape end backslash
-sed -i -e 's~-Didea.paths.selector=.*~-Didea.paths.selector=config/intellij \\~g' /opt/intellij-idea-ce/bin/idea.sh
+sed -i -e 's~-Didea.paths.selector=.*~-Didea.paths.selector=config/intellij \\~g' /opt/android-studio/bin/studio.sh
 
 # set intellij paths for config, plugins, system and log, note the location of the idea.properties
 # file is constructed from the idea.paths.selector value, as shown above.
-mkdir -p /home/nobody/.config/intellij/config
-echo "idea.config.path=/config/intellij/config" > /home/nobody/.config/intellij/config/idea.properties
-echo "idea.plugins.path=/config/intellij/config/plugins" >> /home/nobody/.config/intellij/config/idea.properties
-echo "idea.system.path=/config/intellij/system" >> /home/nobody/.config/intellij/config/idea.properties
-echo "idea.log.path=/config/intellij/system/log" >> /home/nobody/.config/intellij/config/idea.properties
+mkdir -p /home/nobody/.AndroidStudioPreview4.0/config
+echo "idea.config.path=/config/android-studio/config" > /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
+echo "idea.plugins.path=/config/android-studio/config/plugins" >> /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
+echo "idea.system.path=/config/android-studio/system" >> /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
+echo "idea.log.path=/config/android-studio/system/log" >> /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
 
 cat <<'EOF' > /tmp/startcmd_heredoc
 # check if recent projects directory config file exists, if it doesnt we assume
 # intellij hasn't been run yet and thus set default location for future projects to
 # external volume mapping.
-if [ ! -f /config/intellij/config/options/recentProjects.xml ]; then
-	mkdir -p /config/intellij/config/options
-	cp /home/nobody/recentProjects.xml /config/intellij/config/options/recentProjects.xml
+if [ ! -f /config/android-studio/config/options/recentProjects.xml ]; then
+	mkdir -p /config/android-studio/config/options
+	cp /home/nobody/recentProjects.xml /config/android-studio/config/options/recentProjects.xml
 fi
 
 # run intellij
-/usr/bin/idea-ce-eap
+/opt/android-studio/bin/studio.sh
 EOF
 
 # replace startcmd placeholder string with contents of file (here doc)
@@ -81,9 +84,9 @@ cp /home/nobody/novnc-16x16.png /usr/share/webapps/novnc/app/images/icons/
 ####
 
 cat <<'EOF' > /tmp/menu_heredoc
-    <item label="IntelliJ">
+    <item label="Android Studio">
     <action name="Execute">
-      <command>/usr/bin/idea-ce-eap</command>
+      <command>/opt/android-studio/bin/studio.sh</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -102,7 +105,7 @@ rm /tmp/menu_heredoc
 ####
 
 # define comma separated list of paths 
-install_paths="/tmp,/usr/share/themes,/home/nobody,/usr/share/webapps/novnc,/opt/intellij-idea-ce,/usr/share/applications,/usr/share/licenses,/etc/xdg,/usr/share/java/gradle"
+install_paths="/tmp,/usr/share/themes,/home/nobody,/usr/share/webapps/novnc,/opt/android-studio,/usr/share/applications,/usr/share/licenses,/etc/xdg,/usr/share/java/gradle"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"

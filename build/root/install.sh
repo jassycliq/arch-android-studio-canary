@@ -8,7 +8,7 @@ set -e
 
 # download build scripts from github
 curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o /tmp/scripts-master.zip -L https://github.com/binhex/scripts/archive/master.zip
-curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o /tmp/android-studio.tar.gz -L https://dl.google.com/dl/android/studio/ide-zips/4.0.0.9/android-studio-ide-193.6137316-linux.tar.gz
+curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-time 60 -o /tmp/android-studio.tar.gz -L https://dl.google.com/dl/android/studio/ide-zips/3.5.3.0/android-studio-ide-191.6010548-linux.tar.gz
 
 # unzip build scripts
 unzip /tmp/scripts-master.zip -d /tmp
@@ -48,10 +48,10 @@ sed -i -e 's~-Didea.paths.selector=.*~-Didea.paths.selector=config/intellij \\~g
 # set intellij paths for config, plugins, system and log, note the location of the idea.properties
 # file is constructed from the idea.paths.selector value, as shown above.
 mkdir -p /home/nobody/.AndroidStudioPreview4.0/config
-echo "idea.config.path=/config/android-studio/config" > /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
-echo "idea.plugins.path=/config/android-studio/config/plugins" >> /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
-echo "idea.system.path=/config/android-studio/system" >> /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
-echo "idea.log.path=/config/android-studio/system/log" >> /home/nobody/.AndroidStudioPreview4.0/config/idea.properties
+echo "idea.config.path=/config/android-studio/config" > /home/nobody/.AndroidStudio/config/idea.properties
+echo "idea.plugins.path=/config/android-studio/config/plugins" >> /home/nobody/.AndroidStudio/config/idea.properties
+echo "idea.system.path=/config/android-studio/system" >> /home/nobody/.AndroidStudio/config/idea.properties
+echo "idea.log.path=/config/android-studio/system/log" >> /home/nobody/.AndroidStudio/config/idea.properties
 
 cat <<'EOF' > /tmp/startcmd_heredoc
 # check if recent projects directory config file exists, if it doesnt we assume

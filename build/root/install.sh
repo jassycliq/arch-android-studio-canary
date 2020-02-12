@@ -47,7 +47,7 @@ sed -i -e 's~-Didea.paths.selector=.*~-Didea.paths.selector=config/intellij \\~g
 
 # set intellij paths for config, plugins, system and log, note the location of the idea.properties
 # file is constructed from the idea.paths.selector value, as shown above.
-mkdir -p /home/nobody/.AndroidStudioPreview4.0/config
+mkdir -p /home/nobody/.AndroidStudio/config
 echo "idea.config.path=/config/android-studio/config" > /home/nobody/.AndroidStudio/config/idea.properties
 echo "idea.plugins.path=/config/android-studio/config/plugins" >> /home/nobody/.AndroidStudio/config/idea.properties
 echo "idea.system.path=/config/android-studio/system" >> /home/nobody/.AndroidStudio/config/idea.properties

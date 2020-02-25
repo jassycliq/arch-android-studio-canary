@@ -1,4 +1,4 @@
-FROM binhex/arch-int-gui:latest
+FROM jassycliq/arch-int-gui:latest
 MAINTAINER binhex
 
 # additional files
